@@ -40,13 +40,13 @@ NUM_SENSORS = len(SENSORS_LIST)
 
 
 def get_station_data(dt_from_string, dt_to_string):
-    if os.path.exists('file.csv'):
-        os.remove('file.csv')
+    if os.path.exists('data/file.csv'):
+        os.remove('data/file.csv')
     with open('station/tot', 'r', newline='') as file:
         for linea in file:
             station_name = linea.strip().split()[0]
             data = api_airqino.get_hourly_avg(station_name, dt_from_string, dt_to_string)
-            with open('file.csv', 'a', newline='') as csvfile:
+            with open('data/file.csv', 'a', newline='') as csvfile:
                 csvfile.write(data)
 
 
@@ -61,9 +61,9 @@ def remove_rows(data, column, value):
     return new_data
 
 
-# Crea il dataframe eliminando dal file le colonne e le righe inutili
+# Crea il dataframe eliminando dal data le colonne e le righe inutili
 def create_dataframe():
-    data = pd.read_csv('file.csv', sep=';')
+    data = pd.read_csv('data/file.csv', sep=';')
 
     data = remove_rows(data, 'bucket_start_timestamp', 'bucket_start_timestamp')
 
@@ -138,7 +138,7 @@ def build_graph(df, threshold_distance, data_file, num_timesteps_in=NUM_TIMESTEP
 
     edge_weight = weights[adjacency_matrix > 0].astype(float)
 
-    # Carica i dati delle misurazioni dai file CSV
+    # Carica i dati delle misurazioni dai data CSV
     measurement_df = pd.read_csv(data_file, sep=';')
 
     # Estrai le informazioni necessarie per costruire la matrice delle features
@@ -183,7 +183,7 @@ def build_graph(df, threshold_distance, data_file, num_timesteps_in=NUM_TIMESTEP
     all_features[:, NUM_FEATURES-1, :] = scaled_feature
 
 
-    np.savez("matrici.npz", mean=means, std=stds, edge_index=edge_index, edge_weight=edge_weight)
+    np.savez("data/matrici.npz", mean=means, std=stds, edge_index=edge_index, edge_weight=edge_weight)
 
     # Mappa gli indici numerici ai nomi delle stazioni
     node_index_to_station_name = {i: station_name for i, station_name in enumerate(df['station_name'])}
@@ -227,9 +227,9 @@ def add_data(csvfile):
     station = {}
     count = 0
 
-    # Apri il file in modalità lettura
+    # Apri il data in modalità lettura
     with open('station/tot', 'r') as file:
-        # Itera attraverso ogni riga nel file
+        # Itera attraverso ogni riga nel data
         for line in file:
             # Dividi la riga in parole utilizzando lo spazio come delimitatore
             words = line.strip().split()
@@ -256,7 +256,7 @@ def add_data(csvfile):
         df = pd.read_csv(csvfile, sep=';')
         df_update = pd.DataFrame(columns=df.columns)
 
-        # Itera attraverso le righe del file CSV
+        # Itera attraverso le righe del data CSV
         for index, row in df.iterrows():
             # Estrae la stazione alla riga corrente
             station_row = row['station_name']
@@ -352,7 +352,7 @@ def add_data(csvfile):
 
             prev_day = current_day
 
-    # Quando termina il file devo comunque memorizzare l'ultimo giorno
+    # Quando termina il data devo comunque memorizzare l'ultimo giorno
 
     # Crea una maschera per identificare i valori nulli
     co2_mask = (co2_matrix != 0.0)
@@ -418,8 +418,8 @@ def add_data(csvfile):
 
     # Concatenazione del DataFrame esistente con il nuovo DataFrame delle righe aggiunte
     df_update = pd.concat([df_update, new_rows_df], ignore_index=True)
-    if os.path.exists('complete_dataframe.csv'):
-        os.remove('complete_dataframe.csv')
+    if os.path.exists('data/complete_dataframe.csv'):
+        os.remove('data/complete_dataframe.csv')
     df_update.to_csv('complete_dataframe.csv', index=False, sep=';')
 
 
@@ -482,7 +482,7 @@ def training_testing(train_dataset, test_dataset):
 
     ### Ritorno ai valori non normalizzati ###
 
-    matrices = np.load("matrici.npz")
+    matrices = np.load("data/matrici.npz")
 
     # Estraiamo le matrici
     means = matrices['mean']
@@ -507,8 +507,8 @@ def training_testing(train_dataset, test_dataset):
     end_time = timer()
     time = end_time - start_time
 
-    with open('log.txt', 'a') as file:
-        # Scrivere una stringa nel file
+    with open('data/log.txt', 'a') as file:
+        # Scrivere una stringa nel data
         file.write('Tempo impiegato: ' + str(time) + " Test MSE: {:.4f}".format(loss) + '  NUM_TIMESTEPS_IN: ' + str(
             NUM_TIMESTEPS_IN) +
                    '    NUM_TIMESTEPS_OUT: ' + str(NUM_TIMESTEPS_OUT) + '  STEP_SLICE: ' + str(

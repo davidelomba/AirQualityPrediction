@@ -14,7 +14,7 @@ from request import NUM_FEATURES, NUM_TIMESTEPS_OUT, OUT_CHANNELS, FEATURES_LIST
 
 
 def prediction_autoregressive(date_start, date_end, data_file, k, network_model, num_timesteps_in, num_timesteps_out):
-    # Carica il file CSV
+    # Carica il data CSV
     df = pd.read_csv(data_file, delimiter=';')
 
     # Converte la colonna 'bucket_start_timestamp' in formato datetime
@@ -109,7 +109,7 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
         # Passa all'intervallo di tempo successivo
         current_time += pd.Timedelta(hours=num_timesteps_in)
 
-    matrices = np.load("matrici.npz")
+    matrices = np.load("data/matrici.npz")
     edge_index = matrices['edge_index']
     edge_weight = matrices['edge_weight']
 
@@ -311,4 +311,4 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
     print("RMSE su tutte le stazioni: ", rmse_avg)
     print("RMSE baseline su tutte le stazioni: ", baseline_avg)
 if __name__ == "__main__":
-    prediction_autoregressive('2024-01-25', '2024-02-25', 'complete_dataframe.csv', 0.05, 'model/model_24_4_1_256_100_2_100.pth', 24, 4)
+    prediction_autoregressive('2024-01-25', '2024-02-25', 'data/complete_dataframe.csv', 0.05, 'model/model_24_4_1_256_100_2_100.pth', 24, 4)

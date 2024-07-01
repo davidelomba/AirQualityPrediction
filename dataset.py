@@ -11,12 +11,12 @@ if __name__ == "__main__":
     dataframe = create_dataframe()
 
     df_pivot = create_dataframe_graph(dataframe)
-    if os.path.exists('pivot_dataframe.csv'):
-        os.remove('pivot_dataframe.csv')
+    if os.path.exists('data/pivot_dataframe.csv'):
+        os.remove('data/pivot_dataframe.csv')
     df_pivot.to_csv('pivot_dataframe.csv', index=True, sep=';')
 
     add_data('pivot_dataframe.csv')
 
     print('Sto sostituendo i valori NaN')
 
-    complete_dataframe('complete_dataframe.csv')
+    complete_dataframe('data/complete_dataframe.csv')

@@ -92,12 +92,12 @@ def merge_dataframe(file_path, df_w_p):
         ['bucket_start_timestamp', 'station_name', 'co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp',
          'day_of_week']]
     print(merged_df)
-    if os.path.exists('complete_dataframe.csv'):
-        os.remove('complete_dataframe.csv')
+    if os.path.exists('data/complete_dataframe.csv'):
+        os.remove('data/complete_dataframe.csv')
     merged_df.to_csv('complete_dataframe.csv', index=False, sep=';')
 
 
 if __name__ == "__main__":
     # request_cds()
-    df_w_p = create_dataframe_wind_precipitation('wind_precipitation.nc')
-    merge_dataframe('complete_dataframe.csv', df_w_p)
+    df_w_p = create_dataframe_wind_precipitation('data/wind_precipitation.nc')
+    merge_dataframe('data/complete_dataframe.csv', df_w_p)

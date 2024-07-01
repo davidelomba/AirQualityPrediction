@@ -6,7 +6,7 @@ if __name__ == "__main__":
 
     df_lon_lat = lon_lat_dataframe(dataframe)
 
-    dataset, node_index_to_station_name = build_graph(df_lon_lat, THRESHOLD_DISTANCE, 'complete_dataframe.csv')
+    dataset, node_index_to_station_name = build_graph(df_lon_lat, THRESHOLD_DISTANCE, 'data/complete_dataframe.csv')
 
     print(dataset)
 
