@@ -13,9 +13,9 @@ if __name__ == "__main__":
     df_pivot = create_dataframe_graph(dataframe)
     if os.path.exists('data/pivot_dataframe.csv'):
         os.remove('data/pivot_dataframe.csv')
-    df_pivot.to_csv('pivot_dataframe.csv', index=True, sep=';')
+    df_pivot.to_csv('data/pivot_dataframe.csv', index=True, sep=';')
 
-    add_data('pivot_dataframe.csv')
+    add_data('data/pivot_dataframe.csv')
 
     print('Sto sostituendo i valori NaN')
 

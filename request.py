@@ -420,7 +420,7 @@ def add_data(csvfile):
     df_update = pd.concat([df_update, new_rows_df], ignore_index=True)
     if os.path.exists('data/complete_dataframe.csv'):
         os.remove('data/complete_dataframe.csv')
-    df_update.to_csv('complete_dataframe.csv', index=False, sep=';')
+    df_update.to_csv('data/complete_dataframe.csv', index=False, sep=';')
 
 
 def complete_dataframe(file):
