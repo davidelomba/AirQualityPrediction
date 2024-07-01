@@ -31,6 +31,9 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
     date_end_true = date_end + timedelta(days=1)
     date_end_true = date_end_true.strftime("%Y-%m-%d")
 
+    days_month = date_end-date_start
+    days_month = days_month.days
+
     # Salvo il giorno successivo per confrontarlo con le predizioni
     df_true = df[(df['bucket_start_timestamp'] >= date_start_true) & (df['bucket_start_timestamp'] < date_end_true)]
 
@@ -139,14 +142,14 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
 
     final_label = np.concatenate(label_array, axis=1)
 
-    pred_line = np.zeros((num_stations, 744))
+    pred_line = np.zeros((num_stations, days_month*24))
 
     # Il primo valore è uguale all'osservazione per ogni stazione
     for i in range(0, num_stations):
         pred_line[i, 0] = final_label[i, 0]
 
     for i in range(0, num_stations):
-        for j in range(1, 744):
+        for j in range(1, days_month*24):
             pred_line[i, j] = k * final_label[i, j - 1] + (1 - k) * pred_line[i, j - 1]
 
     list_of_tensors = [torch.tensor(arr).to(torch.float32) for arr in tensor_list]
@@ -178,15 +181,15 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
     rmse_values = np.zeros(final_pred.shape[0])
     rmse_line = np.zeros(final_pred.shape[0])
 
-    rmse_values_day = np.zeros((num_stations, 31))
-    rmse_line_day = np.zeros((num_stations, 31))
-    pred_line_avg = np.zeros((num_stations, 31))
+    rmse_values_day = np.zeros((num_stations, days_month))
+    rmse_line_day = np.zeros((num_stations, days_month))
+    pred_line_avg = np.zeros((num_stations, days_month))
 
     for i in range(0, num_stations):
         count = 0
         err_day = 0
         pred_avg = 0
-        for j in range(0, 744):
+        for j in range(0, days_month*24):
             count = count+1
             if count == 24:
                 rmse_line_day[i, int(j / 24)] = math.sqrt(err_day / 24)
@@ -260,7 +263,7 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
             # pred_aqi.append(category_p)
 
         print("Sono giuste " + str(accuracy) + " previsioni su " + str(days) + " con un errore di " + str(
-            math.sqrt(eqm) / 31))
+            math.sqrt(eqm) / days_month))
 
 
         #plt.figure()
@@ -303,7 +306,7 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
         plt.show()
 
 
-    aqi_avg = (aqi_avg/(31*num_stations))*100
+    aqi_avg = (aqi_avg/(days_month*num_stations))*100
     rmse_avg = rmse_avg/num_stations
     baseline_avg = baseline_avg/num_stations
     print("\n\n\n")
@@ -311,4 +314,4 @@ def prediction_autoregressive(date_start, date_end, data_file, k, network_model,
     print("RMSE su tutte le stazioni: ", rmse_avg)
     print("RMSE baseline su tutte le stazioni: ", baseline_avg)
 if __name__ == "__main__":
-    prediction_autoregressive('2024-01-25', '2024-02-25', 'data/complete_dataframe.csv', 0.05, 'model/model_24_4_1_256_100_2_100.pth', 24, 4)
+    prediction_autoregressive('2024-01-25', '2024-02-25', 'data/complete_dataframe.csv', 0.05, 'model/model_24_1_1_256_100_2_4.pth', 24, 1)
