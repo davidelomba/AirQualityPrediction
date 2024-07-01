@@ -48,7 +48,7 @@ def request_cds():
             ],
             'format': 'netcdf',
         },
-        'wind_precipitation.nc')
+        'data/wind_precipitation.nc')
 
 
 def create_dataframe_wind_precipitation(file_path):
@@ -94,7 +94,7 @@ def merge_dataframe(file_path, df_w_p):
     print(merged_df)
     if os.path.exists('data/complete_dataframe.csv'):
         os.remove('data/complete_dataframe.csv')
-    merged_df.to_csv('complete_dataframe.csv', index=False, sep=';')
+    merged_df.to_csv('data/complete_dataframe.csv', index=False, sep=';')
 
 
 if __name__ == "__main__":
