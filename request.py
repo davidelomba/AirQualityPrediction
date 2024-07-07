@@ -29,13 +29,13 @@ OUT_CHANNELS = 256
 SENSOR = 2  # 0 = 'co2', 1 = 'extT', 2 = 'pm10', 3 = 'pm25', 4 = 'rh', 5 = 'wind', 6 = 'tp'
 DATE_START = '2024-01-15'
 DATE_END = '2024-04-15'
-THRESHOLD_DISTANCE = 4
+THRESHOLD_DISTANCE = 0
 NUM_STATIONS = 15
-FEATURES_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp', 'day_of_week']     # 'co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp', 'day_of_week'
-#FEATURES_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'day_of_week']
+#FEATURES_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp', 'day_of_week']     # 'co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp', 'day_of_week'
+FEATURES_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'day_of_week']
 NUM_FEATURES = len(FEATURES_LIST)
-SENSORS_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp']
-#SENSORS_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh']
+#SENSORS_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh', 'wind', 'tp']
+SENSORS_LIST = ['co2', 'extT', 'pm10', 'pm25', 'rh']
 NUM_SENSORS = len(SENSORS_LIST)
 
 
@@ -516,7 +516,7 @@ def training_testing(train_dataset, test_dataset):
             SENSOR) + '   THRESHOLD_DISTANCE: ' + str(THRESHOLD_DISTANCE) + '\n')
 
     path = 'model/model_' + str(NUM_TIMESTEPS_IN) + '_' + str(NUM_TIMESTEPS_OUT) + '_' + str(STEP_SLICE) + '_' + str(
-        OUT_CHANNELS) + '_' + str(EPOCH) + '_' + str(SENSOR) + '_' + str(THRESHOLD_DISTANCE) + '.pth'
+        OUT_CHANNELS) + '_' + str(EPOCH) + '_' + str(SENSOR) + '_' + str(THRESHOLD_DISTANCE) + '_w' + '.pth'
     if os.path.exists(path):
         os.remove(path)
     torch.save(model.state_dict(), path)

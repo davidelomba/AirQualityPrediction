@@ -284,7 +284,7 @@ def prediction_direct(date_start, date_end, data_file, k, network_model, num_tim
         plt.plot(final_pred_avg[i], label='Valori predetti')
         plt.xlabel('Giorno')
         plt.ylabel('Concentrazione inquinante')
-        #plt.ylim(0, 90)
+        plt.ylim(0, 90)
         #plt.plot(pred_line_avg[i], label='pred baseline')
         plt.title("Concentrazione PM10 in un mese")
         plt.legend()
@@ -296,7 +296,7 @@ def prediction_direct(date_start, date_end, data_file, k, network_model, num_tim
         plt.plot(rmse_values_day[i], label='Predizioni')
         plt.xlabel('Giorno')
         plt.ylabel('Valore RMSE')
-        #plt.ylim(0, 50)
+        plt.ylim(0, 50)
         plt.title("RMSE del PM10 in un mese")
         plt.legend()
         plt.grid(True)
@@ -311,4 +311,4 @@ def prediction_direct(date_start, date_end, data_file, k, network_model, num_tim
     print("RMSE su tutte le stazioni: ", rmse_avg)
     print("RMSE baseline su tutte le stazioni: ", baseline_avg)
 if __name__ == "__main__":
-    prediction_direct('2024-01-25', '2024-02-26', 'data/complete_dataframe.csv', 0.05, 'model/model_24_4_1_256_100_2_100.pth', 24, 4)
+    prediction_direct('2024-01-25', '2024-02-26', 'data/complete_dataframe.csv', 0.05, 'model/model_24_1_1_256_100_2_100_w.pth', 24, 1)
